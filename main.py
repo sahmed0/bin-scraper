@@ -12,8 +12,12 @@ from selenium.webdriver.chrome.options import Options
 
 # --- CONFIGURATION ---
 USERS = [
-    {"name": "a", "postcode": "BL9 0RS", "house": "70"},
-    {"name": "b", "postcode": "BL9 9HS", "house": "108"}
+    {"name": "a", "postcode": "BL9 9SZ", "house": "4"},
+    {"name": "b", "postcode": "BL9 7TA", "house": "37"},
+    {"name": "c", "postcode": "BL9 0RS", "house": "88"}
+    {"name": "d", "postcode": "BL8 2TB", "house": "4"}
+    {"name": "e", "postcode": "BL9 9HS", "house": "114"}
+    {"name": "e", "postcode": "BL9 6RL", "house": "19"}
 ]
 
 def setup_driver():
