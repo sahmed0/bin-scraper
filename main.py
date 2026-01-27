@@ -17,7 +17,8 @@ USERS = [
     {"name": "0RS", "postcode": "BL9 0RS", "house": "88"},
     {"name": "2TB", "postcode": "BL8 2TB", "house": "4"},
     {"name": "9HS", "postcode": "BL9 9HS", "house": "114"},
-    {"name": "6RL", "postcode": "BL9 6RL", "house": "43"}
+    {"name": "6RL", "postcode": "BL9 6RL", "house": "43"},
+    {"name": "7DY", "postcode": "BL9 7DY", "house": "118"}
 ]
 
 def setup_driver():
