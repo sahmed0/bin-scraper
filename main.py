@@ -14,9 +14,9 @@ from selenium.webdriver.chrome.options import Options
 USERS = [
     {"name": "9SZ", "postcode": "BL9 9SZ", "house": "4"},
     {"name": "7TA", "postcode": "BL9 7TA", "house": "37"},
-    {"name": "0RS", "postcode": "BL9 0RS", "house": "88"}
-    {"name": "2TB", "postcode": "BL8 2TB", "house": "4"}
-    {"name": "9HS", "postcode": "BL9 9HS", "house": "114"}
+    {"name": "0RS", "postcode": "BL9 0RS", "house": "88"},
+    {"name": "2TB", "postcode": "BL8 2TB", "house": "4"},
+    {"name": "9HS", "postcode": "BL9 9HS", "house": "114"},
     {"name": "6RL", "postcode": "BL9 6RL", "house": "43"}
 ]
 
