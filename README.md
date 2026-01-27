@@ -34,10 +34,9 @@ To add yourself or friends, simply edit the `USERS` list in `main.py`:
 
 ```python
 USERS = [
-    {"name": "a", "postcode": "BL9 9BB", "house": "1"},
-    {"name": "b",   "postcode": "BL9 5AB", "house": "24"}
+    {"name": "9SZ", "postcode": "BL9 9SZ", "house": "4"},
+    {"name": "7TA", "postcode": "BL9 7TA", "house": "37"}
 ]
-
 ```
 
 ### 📱 How to Subscribe
