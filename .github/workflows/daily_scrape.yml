@@ -1,9 +1,9 @@
 name: Daily Bin Scrape
 
-# Schedule: Runs at 06:00 UTC every day
+# Schedule: Runs at 06:00 UTC on Monday
 on:
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '0 6 * * 1'
   # This allows you to click a button to run it manually for testing
   workflow_dispatch:
 
