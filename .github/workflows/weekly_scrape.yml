@@ -30,6 +30,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Scraper
+        env:
+          BIN_USERS: ${{ secrets.BIN_USERS }}
         run: python main.py
 
       - name: Save Calendars
@@ -37,7 +39,7 @@ jobs:
           git config --global user.name "BinBot"
           git config --global user.email "binbot@noreply.github.com"
           
-          # FIX: This adds ALL .ics files created (a.ics, b.ics, etc.)
+          # This adds ALL .ics files created (a.ics, b.ics, etc.)
           git add *.ics
           
           # Only commit if something actually changed
