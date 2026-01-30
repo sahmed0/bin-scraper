@@ -1,4 +1,4 @@
-# 🗑️ Bury Council Bin Automator
+# 🗑️ Bin Collection Web Scraper and Calendar
 
 **Never miss bin day again.** This tool automatically scrapes the [Bury Council](https://www.bury.gov.uk) website and syncs the collection dates directly to your phone's calendar.
 
@@ -41,7 +41,7 @@ USERS = [
 
 ### 📱 How to Subscribe
 
-Once the script has run, find your file in the file list (e.g., `a.ics`), click **Raw**, and copy the URL.
+Once the script has run, find your file in the file list (e.g., `ABC.ics`), click **Raw**, and copy the URL.
 
 * **iPhone:** Settings > Calendar > Accounts > Add Account > Subscribed Calendar > Paste URL.
 * **Google Calendar:** "Other calendars" (+) > From URL > Paste URL.
@@ -54,3 +54,11 @@ Once the script has run, find your file in the file list (e.g., `a.ics`), click 
 * **Selenium** (Web Scraping)
 * **ICS** (Calendar Generation)
 * **GitHub Actions** (CI/CD Automation)
+
+## 📄 License
+Copyright © 2026 Sajid Ahmed. All Rights Reserved.
+
+This repository is intended solely for portfolio review and recruitment purposes. By accessing this repository, you acknowledge the following terms:
+- View Only: Permission is granted to view the source code for the purpose of evaluating my professional skills and experience.
+- No Unauthorised Use: No permission is granted to copy, modify, distribute, or use this code for any personal, commercial, or educational project.
+- No AI Training: Use of this source code for the purpose of training machine learning models or generative AI is strictly prohibited.
