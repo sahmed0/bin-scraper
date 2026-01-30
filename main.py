@@ -1,5 +1,7 @@
 import time
 import re
+import os
+import json
 from datetime import datetime
 from ics import Calendar, Event
 from selenium import webdriver
@@ -11,25 +13,29 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 
 # --- CONFIGURATION ---
-USERS = [
-    {"name": "9SZ", "postcode": "BL9 9SZ", "house": "4"},
-    {"name": "7TA", "postcode": "BL9 7TA", "house": "37"},
-    {"name": "0RS", "postcode": "BL9 0RS", "house": "88"},
-    {"name": "2TB", "postcode": "BL8 2TB", "house": "4"},
-    {"name": "9HS", "postcode": "BL9 9HS", "house": "114"},
-    {"name": "6RL", "postcode": "BL9 6RL", "house": "43"},
-    {"name": "7DY", "postcode": "BL9 7DY", "house": "118"}
-]
+# Load users from GitHub Environment Variables (Secrets)
+# If running on laptop, use a dummy list.
+users_env = os.environ.get('BIN_USERS')
 
+if users_env:
+    try:
+        USERS = json.loads(users_env)
+        print("Successfully loaded USERS from Secret.")
+    except json.JSONDecodeError:
+        print("Error: Could not decode BIN_USERS secret. Check your JSON format.")
+        USERS = []
+else:
+    print("Warning: No BIN_USERS secret found. Using dummy data.")
+    USERS = [{"name": "test_user", "postcode": "BL9 0RS", "house": "1"}]
+
+# --- BROWSER SETUP ---
 def setup_driver():
-    """Starts the browser once with optimised settings."""
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--window-size=1920,1080")
 
-    # Block images, CSS, and fonts to save bandwidth
     prefs = {
         "profile.managed_default_content_settings.images": 2,
         "profile.managed_default_content_settings.stylesheets": 2,
@@ -45,9 +51,6 @@ def clean_date_string(date_str):
     return re.sub(r'(\d+)(st|nd|rd|th)', r'\1', date_str)
 
 def get_bin_dates(driver, postcode, house_number):
-    """
-    Scrapes data using an existing driver instance.
-    """
     print(f"--- Searching for {postcode}, House {house_number} ---")
     found_events = []
 
@@ -56,25 +59,26 @@ def get_bin_dates(driver, postcode, house_number):
         driver.get(url)
         wait = WebDriverWait(driver, 10)
 
-        # 1. Handle Cookie Banner (Fast Check)
+        # 1. Reject Cookies
         try:
-            accept_btn = WebDriverWait(driver, 2).until(EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'accept')]")
+            # We target the reject button directly by its ID
+            reject_btn = WebDriverWait(driver, 2).until(EC.element_to_be_clickable(
+                (By.ID, "ccc-reject-settings")
             ))
-            driver.execute_script("arguments[0].click();", accept_btn)
+            driver.execute_script("arguments[0].click();", reject_btn)
         except:
-            pass 
+            pass
 
-        # 2. Enter Postcode
+        # 2. Postcode
         postcode_input = wait.until(EC.visibility_of_element_located((By.ID, "postcode")))
-        postcode_input.clear() # Good practice to clear before typing
+        postcode_input.clear()
         postcode_input.send_keys(postcode)
 
-        # 3. Click Search
+        # 3. Search
         search_btn = driver.find_element(By.CSS_SELECTOR, "div.form-buttons button[type='submit']")
         driver.execute_script("arguments[0].click();", search_btn)
 
-        # 4. Select Address
+        # 4. Address Selection
         buttons = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "address__listButton")))
 
         address_found = False
@@ -90,13 +94,11 @@ def get_bin_dates(driver, postcode, house_number):
             print(f"Address '{house_number}' not found for {postcode}!")
             return []
 
-        # 5. Get Results
+        # 5. Results
         date_elements = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "bin__date")))
 
         for date_el in date_elements:
-            # Use JS to get parent text instantly
             full_text = driver.execute_script("return arguments[0].parentNode.innerText;", date_el)
-
             lines = full_text.split('\n')
             bin_name = "Bin Collection"
             date_text = ""
@@ -111,11 +113,7 @@ def get_bin_dates(driver, postcode, house_number):
                 try:
                     clean_date = clean_date_string(date_text)
                     dt_object = datetime.strptime(clean_date, "%A %d %B %Y")
-
-                    found_events.append({
-                        "name": bin_name,
-                        "date": dt_object
-                    })
+                    found_events.append({"name": bin_name, "date": dt_object})
                     print(f"Found: {bin_name} on {dt_object.date()}")
                 except ValueError:
                     continue
@@ -126,7 +124,6 @@ def get_bin_dates(driver, postcode, house_number):
     return found_events
 
 def get_emoji(bin_name):
-    """Returns a colored square based on the bin name."""
     name = bin_name.lower()
     if "grey" in name: return "⬛"
     if "blue" in name: return "🟦"
@@ -136,14 +133,12 @@ def get_emoji(bin_name):
 
 def generate_calendar(events, filename):
     c = Calendar()
-    
     for item in events:
         e = Event()
-        # Use the emoji helper function!
         e.name = f"{get_emoji(item['name'])} {item['name']}"
         e.begin = item['date']
         e.make_all_day()
-        e.description = "Generated by my Python Robot."
+        e.description = "Generated by Sajid's code."
         c.events.add(e)
         
     with open(filename, 'w', encoding='utf-8') as f:
@@ -151,28 +146,23 @@ def generate_calendar(events, filename):
     print(f"Calendar saved to {filename}")
 
 if __name__ == "__main__":
-    # 1. Start Browser ONCE
+    if not USERS:
+        print("No users configured. Exiting.")
+        exit()
+
     print("Starting Browser...")
     driver = setup_driver()
 
     try:
-        # 2. Loop through users
         for user in USERS:
             print(f"\nProcessing {user['name']}...")
-            
-            # Pass the SHARED driver to the function
             events = get_bin_dates(driver, user['postcode'], user['house'])
             
             if events:
                 filename = f"{user['name']}.ics"
-                # Call the correct function
                 generate_calendar(events, filename)
             
-            # Small pause to be polite to the server
             time.sleep(2)
-            
     finally:
-        # 3. Close Browser ONCE at the very end
         print("\nClosing Browser...")
         driver.quit()
-        
