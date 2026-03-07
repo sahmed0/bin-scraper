@@ -1,10 +1,12 @@
-# 🗑️ Bin Collection Web Scraper and Calendar
+# Bin Collection Web Scraper and Calendar
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 **Never miss bin day again.** This tool automatically scrapes the [Bury Council](https://www.bury.gov.uk) website and syncs the collection dates directly to your phone's calendar.
 
 It runs entirely in the cloud (GitHub Actions) and updates weekly, so you never have to maintain it.
 
-### ✨ Features
+### Features
 
 * **Zero Maintenance:** Runs automatically every Monday morning.
 * **Smart Calendars:** Generates `.ics` files compatible with iPhone (iOS), Google Calendar, and Outlook.
@@ -19,7 +21,7 @@ It runs entirely in the cloud (GitHub Actions) and updates weekly, so you never 
 
 ---
 
-### 🚀 How It Works
+### How It Works
 
 1. **Scrape:** A Python script (`main.py`) launches a headless browser to check the council website for specific addresses.
 2. **Generate:** It creates an iCalendar (`.ics`) file for each user found.
@@ -28,7 +30,7 @@ It runs entirely in the cloud (GitHub Actions) and updates weekly, so you never 
 
 ---
 
-### 🛠️ Configuration
+### Configuration
 
 To add yourself or friends, simply edit the `USERS` list in `main.py`:
 
@@ -39,7 +41,7 @@ USERS = [
 ]
 ```
 
-### 📱 How to Subscribe
+### How to Subscribe
 
 Once the script has run, find your file in the file list (e.g., `ABC.ics`), click **Raw**, and copy the URL.
 
@@ -48,17 +50,20 @@ Once the script has run, find your file in the file list (e.g., `ABC.ics`), clic
 
 ---
 
-### 💻 Tech Stack
+### Tech Stack
 
 * **Python 3.9**
 * **Selenium** (Web Scraping)
 * **ICS** (Calendar Generation)
 * **GitHub Actions** (CI/CD Automation)
 ---
-## MIT Licence
 
-This project is licensed under the **MIT Licence**. 
+## License
 
-This means you are free to use, copy, modify, and distribute the software for any purpose, including commercial applications, provided that the original copyright notice and this permission notice are included in all copies or substantial portions of the software.
+Copyright © 2026 Sajid Ahmed
 
-*See the [LICENSE](LICENSE) file for the full text.*
+This program is free software: you can redistribute it and/or modify it under the terms of the **GNU General Public License** as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but **WITHOUT ANY WARRANTY**; without even the implied warranty of **MERCHANTABILITY** or **FITNESS FOR A PARTICULAR PURPOSE**. 
+
+See the [LICENSE](LICENSE) file for more details.
